@@ -264,8 +264,20 @@ class GreedyAlgorithm(BaseAlgorithm):
 
     def save_model(self, path: str) -> str:
         """Save the greedy algorithm parameters and fitted state."""
-        if not path.endswith('.pkl'):
-            path = f"{path}.pkl"
+        # Get the foreseer_models directory
+        import os
+        import foreseer_models
+
+        # Create full path inside foreseer_models/models/
+        foreseer_dir = os.path.dirname(foreseer_models.__file__)
+        models_dir = os.path.join(foreseer_dir, "models", "greedy")
+
+        # Ensure path doesn't have directory separators (security)
+        filename = os.path.basename(path)
+        if not filename.endswith('.pkl'):
+            filename = f"{filename}.pkl"
+
+        full_path = os.path.join(models_dir, filename)
 
         model_state = {
             'name': self.name,
@@ -279,15 +291,27 @@ class GreedyAlgorithm(BaseAlgorithm):
             'last_allocation': self.last_allocation
         }
 
-        os.makedirs(os.path.dirname(path), exist_ok=True)
+        # Create directory if it doesn't exist
+        os.makedirs(models_dir, exist_ok=True)
 
-        with open(path, 'wb') as f:
+        with open(full_path, 'wb') as f:
             pickle.dump(model_state, f)
 
-        return path
+        return full_path
 
     def load_model(self, path: str) -> None:
         """Load the greedy algorithm parameters and fitted state."""
+        # Handle both full paths and just filenames
+        if not os.path.isabs(path) and not os.path.exists(path):
+            # Try to find it in the models directory
+            import foreseer_models
+            foreseer_dir = os.path.dirname(foreseer_models.__file__)
+            models_path = os.path.join(foreseer_dir, "models", "greedy", path)
+            if not path.endswith('.pkl'):
+                models_path = f"{models_path}.pkl"
+            if os.path.exists(models_path):
+                path = models_path
+
         with open(path, 'rb') as f:
             model_state = pickle.load(f)
 
