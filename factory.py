@@ -46,6 +46,12 @@ class AlgorithmFactory:
                 pass
 
             try:
+                from .algorithms.greedy_daily import GreedyDailyAlgorithm
+                cls._algorithms['greedy_daily'] = GreedyDailyAlgorithm
+            except ImportError:
+                pass
+
+            try:
                 from .algorithms.neural_net import NeuralNetAlgorithm
                 cls._algorithms['neural_net'] = NeuralNetAlgorithm
                 cls._algorithms['nn'] = NeuralNetAlgorithm  # alias
