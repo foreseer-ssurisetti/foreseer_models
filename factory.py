@@ -52,6 +52,13 @@ class AlgorithmFactory:
                 pass
 
             try:
+                from .algorithms.greedy_second_best import GreedySecondBestAlgorithm
+                cls._algorithms['greedy_second_best'] = GreedySecondBestAlgorithm
+                cls._algorithms['gsb'] = GreedySecondBestAlgorithm  # alias
+            except ImportError:
+                pass
+
+            try:
                 from .algorithms.neural_net import NeuralNetAlgorithm
                 cls._algorithms['neural_net'] = NeuralNetAlgorithm
                 cls._algorithms['nn'] = NeuralNetAlgorithm  # alias

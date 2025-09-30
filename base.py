@@ -21,6 +21,14 @@ class StrategyResults:
     model_path: Optional[str] = None
     training_metrics: Optional[Dict[str, Any]] = None
 
+    # New fields for second-best analysis
+    weights_second_best: Optional[np.ndarray] = None
+    oos_sharpe_annual_second: Optional[float] = None
+    allocations_second_best: Optional[pd.DataFrame] = None
+    oos_returns_second: Optional[pd.Series] = None
+    sharpe_diff_history: Optional[pd.Series] = None
+    next_month_info: Optional[Dict[str, Any]] = None
+
 
 class BaseAlgorithm(ABC):
     """Abstract base class for all algorithms."""
